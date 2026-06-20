@@ -1,7 +1,7 @@
 #!/bin/sh
 # install.sh — one-command installer for claude-docker-sandbox.
 #
-#   curl -LsSf https://raw.githubusercontent.com/aloony/claude-docker-sandbox/main/install.sh | sh
+#   curl -LsSf https://raw.githubusercontent.com/aloony/claude-docker-sandbox/master/install.sh | sh
 #
 # It clones (or, if already present, updates) the repo into a data dir, then
 # symlinks the `claude-sandbox` launcher onto your PATH. Re-running it updates an

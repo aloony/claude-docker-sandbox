@@ -26,7 +26,7 @@ Why bother:
 ## Install
 
 ```sh
-curl -LsSf https://raw.githubusercontent.com/aloony/claude-docker-sandbox/main/install.sh | sh
+curl -LsSf https://raw.githubusercontent.com/aloony/claude-docker-sandbox/master/install.sh | sh
 ```
 
 This clones the repo into `~/.local/share/claude-sandbox` and symlinks the
@@ -157,4 +157,4 @@ bump it there.
 
 ## License
 
-[MIT](./LICENSE).
+[MIT](./LICENSE)
