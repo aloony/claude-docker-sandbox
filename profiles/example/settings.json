@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls:*)",
+      "Bash(rg:*)",
+      "Bash(find:*)",
+      "Bash(cat:*)",
+      "Bash(git status:*)",
+      "Bash(git diff:*)"
+    ],
+    "defaultMode": "auto"
+  },
+  "model": "claude-opus-4-8",
+  "theme": "dark",
+  "env": {
+    "DISABLE_AUTOUPDATER": "1"
+  }
+}

@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+#
+# claude-sandbox — run Claude Code inside a Docker container against a repo.
+#
+#   claude-sandbox <profile> [path-to-repo]
+#
+#   <profile>   a directory under ./profiles (e.g. "example")
+#   [path]      repo to mount at /claude inside the container (default: ".")
+#
+# The container gets two bind mounts that matter:
+#   - the target repo            -> /claude          (your working tree)
+#   - a per-profile *state* dir  -> /home/node/.claude (credentials, history, …)
+# and a handful of *profile* files (settings, CLAUDE.md, skills) that are
+# versioned in this repo and synced two-way. See README.md for the full picture.
+set -euo pipefail
+
+# Resolve symlinks so an installer can drop a symlink to this script on $PATH
+# while the real file (and docker-compose.yml, profiles/) live elsewhere.
+here="$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")" && pwd)"
+
+profile="${1:-}"
+if [ -z "$profile" ]; then
+  echo "usage: claude-sandbox <profile> [path-to-repo]" >&2
+  echo "profiles available:" >&2
+  find "$here/profiles" -maxdepth 1 -mindepth 1 -type d -printf '  %f\n' >&2
+  exit 2
+fi
+
+profile_dir="$here/profiles/$profile"
+if [ ! -d "$profile_dir" ]; then
+  echo "no such profile: $profile_dir" >&2
+  exit 1
+fi
+
+# The repo you want Claude to work on, mounted at /claude.
+repo="$(cd "${2:-.}" && pwd)"
+
+# Live, machine-local state + credentials. One dir per profile so work and
+# personal logins never mix. NEVER commit this — it lives in $HOME, not the repo.
+state_dir="$HOME/.claude-$profile"
+# Create it as us, otherwise Docker creates the bind-mount root-owned.
+mkdir -p "$state_dir"
+
+# docker-compose.yml interpolates these at parse time.
+GID="$(id -g)"; export GID
+export UID                       # bash sets UID (readonly); just mark it exported.
+export CLAUDE_STATE_DIR="$state_dir"
+export CLAUDE_PROFILE_DIR="$profile_dir"
+
+exec docker compose -f "$here/docker-compose.yml" run --rm \
+  -v "$repo:/claude" claude

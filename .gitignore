@@ -1,0 +1,9 @@
+# Per-profile live state lives in $HOME/.claude-<profile>, never here — but
+# ignore these just in case someone points state at the repo by accident.
+.claude-*/
+.env
+
+# Profiles may legitimately hold settings.json + skills, but local overrides
+# (settings.local.json) are where secrets/tokens tend to leak in. Keep them out.
+profiles/*/settings.local.json
+profiles/*/.credentials.json

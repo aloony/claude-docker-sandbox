@@ -1,0 +1,32 @@
+services:
+  claude:
+    build:
+      context: .
+    container_name: claude-sandbox
+    network_mode: host
+    stdin_open: true
+    tty: true
+    restart: "no"
+    user: "${UID}:${GID}"
+    environment:
+      # Relocate .claude.json (login/onboarding state) into the mounted config
+      # dir so it persists across container recreation instead of the ephemeral
+      # overlay. Credentials persist in .credentials.json in the same dir.
+      - CLAUDE_CONFIG_DIR=/home/node/.claude
+      # Point the ALSA pulse plugin (and SoX/native) at the host sound server.
+      # Same UID as the host means SO_PEERCRED auth — no pulse cookie needed.
+      - PULSE_SERVER=unix:/run/user/${UID}/pulse/native
+    volumes:
+      # Live, machine-local state + credentials — NOT in the repo. Holds
+      # .credentials.json, .claude.json, history, projects, sessions, caches.
+      - ${CLAUDE_STATE_DIR}:/home/node/.claude:rw
+      # Versioned per-profile config, mounted from the dotfiles working copy.
+      # Two-way: edits here and in-app changes flow back to the repo so other
+      # machines pick them up on pull. Selected by ${CLAUDE_PROFILE_DIR}.
+      - ${CLAUDE_PROFILE_DIR}/settings.json:/home/node/.claude/settings.json:rw
+      - ${CLAUDE_PROFILE_DIR}/CLAUDE.md:/home/node/.claude/CLAUDE.md:rw
+      - ${CLAUDE_PROFILE_DIR}/skills:/home/node/.claude/skills:rw
+      # Host PipeWire/PulseAudio socket, so `/voice` can record the mic. systemd
+      # exposes it at /run/user/$UID/pulse; assumes a standard systemd session.
+      - /run/user/${UID}/pulse:/run/user/${UID}/pulse:rw
+    working_dir: /claude
