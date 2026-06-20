@@ -1,7 +1,7 @@
 #!/bin/sh
-# install.sh — one-command installer for claude-code-sandbox.
+# install.sh — one-command installer for claude-docker-sandbox.
 #
-#   curl -LsSf https://raw.githubusercontent.com/USER/claude-code-sandbox/main/install.sh | sh
+#   curl -LsSf https://raw.githubusercontent.com/aloony/claude-docker-sandbox/main/install.sh | sh
 #
 # It clones (or, if already present, updates) the repo into a data dir, then
 # symlinks the `claude-sandbox` launcher onto your PATH. Re-running it updates an
@@ -13,7 +13,7 @@
 #   CLAUDE_SANDBOX_REPO   git URL to clone (default: the upstream repo)
 set -eu
 
-REPO_URL="${CLAUDE_SANDBOX_REPO:-https://github.com/USER/claude-code-sandbox.git}"
+REPO_URL="${CLAUDE_SANDBOX_REPO:-https://github.com/aloony/claude-docker-sandbox.git}"
 DATA_DIR="${CLAUDE_SANDBOX_HOME:-${XDG_DATA_HOME:-$HOME/.local/share}/claude-sandbox}"
 BIN_DIR="${XDG_BIN_HOME:-$HOME/.local/bin}"
 

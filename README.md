@@ -1,4 +1,4 @@
-# claude-code-sandbox
+# claude-docker-sandbox
 
 Run [Claude Code](https://claude.com/claude-code) inside a disposable Docker
 container instead of directly on your machine. The agent gets a full dev
@@ -26,7 +26,7 @@ Why bother:
 ## Install
 
 ```sh
-curl -LsSf https://raw.githubusercontent.com/USER/claude-code-sandbox/main/install.sh | sh
+curl -LsSf https://raw.githubusercontent.com/aloony/claude-docker-sandbox/main/install.sh | sh
 ```
 
 This clones the repo into `~/.local/share/claude-sandbox` and symlinks the
@@ -38,8 +38,8 @@ read it first if you like: `curl -LsSf <url> -o install.sh && less install.sh`.
 Prefer to do it by hand? Clone anywhere and symlink the launcher yourself:
 
 ```sh
-git clone https://github.com/USER/claude-code-sandbox.git
-ln -s "$PWD/claude-code-sandbox/claude-sandbox" ~/.local/bin/claude-sandbox
+git clone https://github.com/aloony/claude-docker-sandbox.git
+ln -s "$PWD/claude-docker-sandbox/claude-sandbox" ~/.local/bin/claude-sandbox
 ```
 
 ## Quick start
